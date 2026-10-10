@@ -1,12 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
+import CurrentDate from "./CurrentDate";
 
 const Header = () => {
-  const date = new Date();
 
-  const banglaFormat = date.toLocaleDateString("bn-BD", {
-    dateStyle: "full",
-  });
 
   return (
     <div className="container mx-auto px-4 py-3 sm:px-6">
@@ -31,7 +28,7 @@ const Header = () => {
               </h1>
 
               <p className="mt-1 text-xs text-gray-600 sm:text-sm">
-                {banglaFormat}
+                <CurrentDate/>
               </p>
             </div>
           </div>

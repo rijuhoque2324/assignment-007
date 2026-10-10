@@ -1,31 +1,48 @@
-import NavLinkItems from "./NavLinkItems";
 
-interface Navs {
+import { Suspense } from "react";
+import NavLinkItems from "./NavLinkItems";
+import HomeNavLink from "./HomeNavLink";
+
+interface Category {
   id: string;
   slug: string;
   nameBn: string;
   icon: string;
 }
 
-const NavLink = async () => {
+const Categories = async () => {
   const res = await fetch(
     "https://api.abcz.workers.dev/api/bazardor/categories"
   );
 
-  const data = await res.json();
+  if (!res.ok) {
+    throw new Error("Failed to fetch categories");
+  }
+
+  const data: Category[] = await res.json();
 
   return (
+    <div className="container mx-auto flex gap-2 px-4">
+      <HomeNavLink />
+
+      {data.map((category) => (
+        <NavLinkItems
+          key={category.id}
+          slug={category.slug}
+          nameBn={category.nameBn}
+          icon={category.icon}
+        />
+      ))}
+    </div>
+  );
+};
+
+const NavLink = () => {
+  return (
     <nav className="border-y border-gray-200">
-      <div className="container mx-auto flex items-center gap-1 overflow-x-auto px-4 sm:flex-wrap sm:gap-2 sm:overflow-visible">
-        {data.map((category: Navs) => (
-         <NavLinkItems
-            key={category.id}
-            id={category.id}
-            nameBn={category.nameBn}
-            icon={category.icon}
-          />
-        ))}
-      </div>
+      <Suspense fallback={<p>Loading...</p>}>
+        <Categories />
+      </Suspense>
     </nav>
   );
 };

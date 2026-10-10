@@ -1,16 +1,24 @@
+
 "use client";
 
-const CurrentDate = () => {
-    const date = new Date();
+import { useEffect, useState } from "react";
 
-    const banglaFormat = date.toLocaleDateString("bn-BD", {
+const CurrentDate = () => {
+  const [date, setDate] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const today = new Date().toLocaleDateString("bn-BD", {
         dateStyle: "full",
-    });
-    return (
-        <div>
-            {banglaFormat}
-        </div>
-    );
+      });
+
+      setDate(today);
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  return <span>{date || "তারিখ লোড হচ্ছে..."}</span>;
 };
 
 export default CurrentDate;

@@ -26,6 +26,7 @@ const Categories = async () => {
 
   return (
     <div className="container mx-auto flex gap-2 px-4">
+      <div className="flex items-center gap-1 overflow-x-auto scrollbar-none">
       <HomeNavLink />
 
       {data.map((category) => (
@@ -36,6 +37,8 @@ const Categories = async () => {
           icon={category.icon}
         />
       ))}
+      </div>
+      
     </div>
   );
 };

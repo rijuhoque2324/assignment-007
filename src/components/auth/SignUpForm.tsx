@@ -2,6 +2,7 @@
 import { authClient } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 import Link from "next/link";
+import SocialLogin from "./SocialLogin";
 
 const SignUpForm = () => {
   const onSubmit = async (e: React.SubmitEvent<HTMLElement>) => {
@@ -100,7 +101,7 @@ const SignUpForm = () => {
 
         <button
           type="submit"
-          className="w-full rounded-lg bg-green-700 py-3 font-medium text-white hover:bg-green-800"
+          className="w-full rounded-lg bg-green-700 py-3 font-medium text-white hover:bg-green-800 cursor-pointer"
         >
           অ্যাকাউন্ট তৈরি করুন
         </button>
@@ -111,17 +112,24 @@ const SignUpForm = () => {
           <div className="h-px flex-1 bg-gray-200" />
         </div>
 
-        <p className="text-center text-sm text-gray-500">
-          Google ও GitHub Login পরে যুক্ত হবে।
-        </p>
+        <SocialLogin/>
 
         <p className="text-center text-sm text-gray-500">
           অ্যাকাউন্ট আছে?{" "}
-          <Link href="/signin" className="font-medium text-green-700">
+          <Link href="/signin" className="font-medium text-green-700 cursor-pointer">
             সাইন ইন করুন
           </Link>
         </p>
       </form>
+      <div className="mt-6 text-center">
+        <Link
+          href="/"
+          className="inline-flex items-center justify-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-green-600"
+        >
+          <span>←</span>
+          হোম পেজে ফিরে যান
+        </Link>
+      </div>
     </div>
   );
 };

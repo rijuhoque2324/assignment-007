@@ -71,22 +71,11 @@ export default function SignInForm() {
             placeholder="আপনার পাসওয়ার্ড"
             className="w-full rounded-lg border border-gray-200 p-3 outline-green-600"
           />
-        </div>
-
-        <div className="flex items-center justify-between text-sm">
-          <label className="flex items-center gap-2">
-            <input type="checkbox" />
-            মনে রাখুন
-          </label>
-
-          <span className="text-gray-400">
-            পাসওয়ার্ড ভুলে গেছেন?
-          </span>
-        </div>
+        </div>        
 
         <button
           type="submit"
-          className="w-full rounded-lg bg-green-700 py-3 font-medium text-white hover:bg-green-800"
+          className="w-full rounded-lg bg-green-700 py-3 font-medium text-white hover:bg-green-800 cursor-pointer"
         >
           সাইন ইন করুন
         </button>
@@ -106,6 +95,15 @@ export default function SignInForm() {
           </Link>
         </p>
       </form>
+      <div className="mt-6 text-center">
+        <Link
+          href="/"
+          className="inline-flex items-center justify-center gap-2 text-sm font-medium text-gray-600 transition-colors hover:text-green-600"
+        >
+          <span>←</span>
+          হোম পেজে ফিরে যান
+        </Link>
+      </div>
     </div>
   );
 }

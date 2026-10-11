@@ -4,6 +4,7 @@
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-toastify";
+import SocialLogin from "@/components/auth/SocialLogin";
 
 export default function SignInForm() {
 
@@ -26,6 +27,8 @@ export default function SignInForm() {
       toast.error(error.message || "সাইন ইন ব্যর্থ হয়েছে")
     }
   };
+
+  
 
   return (
     <div className="w-full max-w-md">
@@ -94,9 +97,7 @@ export default function SignInForm() {
           <div className="h-px flex-1 bg-gray-200" />
         </div>
 
-        <p className="text-center text-sm text-gray-500">
-          Google ও GitHub Login পরে যুক্ত হবে।
-        </p>
+        <SocialLogin/>
 
         <p className="text-center text-sm text-gray-500">
           অ্যাকাউন্ট নেই?{" "}

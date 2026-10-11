@@ -1,31 +1,56 @@
-"use client"
+"use client";
+
+import { useState } from "react";
+import { toast } from "react-toastify";
 import { authClient } from "@/lib/auth-client";
-import { redirect } from "next/navigation";
 import Link from "next/link";
 import SocialLogin from "./SocialLogin";
 
 const SignUpForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const onSubmit = async (e: React.SubmitEvent<HTMLElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const formData = new FormData(e.target)
-    const user = Object.fromEntries(formData.entries()) as {name:string, email: string, password:string
-    }
-    
-    const {data, error} = await authClient.signUp.email({
-      ...user,
-      callbackURL: "/"
-    })
+    if (isLoading) return;
 
-    if(data){
-      console.log(data);
-      redirect("/");
+    const formData = new FormData(e.target);
+
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirmPassword") as string;
+
+    if (password !== confirmPassword) {
+      toast.error("দুটি পাসওয়ার্ড মিলছে না!");
+      return;
     }
 
-    if(error){
-      console.log(error)
+    setIsLoading(true);
+
+    try {
+      const { data, error } = await authClient.signUp.email({
+        name,
+        email,
+        password,
+        callbackURL: "/",
+      });
+
+      if (error) {
+        toast.error(error.message || "অ্যাকাউন্ট তৈরি করা যায়নি!");
+        return;
+      }
+
+      if (data) {
+        toast.success("অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!")
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("সমস্যা হয়েছে। আবার চেষ্টা করুন!");
+    } finally {
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="w-full max-w-md mx-auto py-4">
@@ -33,12 +58,14 @@ const SignUpForm = () => {
         <h1 className="text-3xl font-bold text-gray-900">
           অ্যাকাউন্ট তৈরি করুন
         </h1>
+
         <p className="mt-2 text-sm text-gray-500">
           বিনা খরচে সাইন আপ করুন সব ফিচার ব্যবহার করতে।
         </p>
       </div>
 
-      <form onSubmit={onSubmit}
+      <form
+        onSubmit={onSubmit}
         className="space-y-4 rounded-xl border border-gray-200 bg-white p-6"
       >
         <div>
@@ -78,7 +105,7 @@ const SignUpForm = () => {
             name="password"
             type="password"
             required
-            minLength={4}
+            minLength={8}
             placeholder="কমপক্ষে ৮ অক্ষর"
             className="w-full rounded-lg border border-gray-200 p-3 outline-green-600"
           />
@@ -90,10 +117,10 @@ const SignUpForm = () => {
           </label>
           <input
             id="confirmPassword"
-            name="password"
+            name="confirmPassword"
             type="password"
             required
-            minLength={4}
+            minLength={8}
             placeholder="আবার লিখুন"
             className="w-full rounded-lg border border-gray-200 p-3 outline-green-600"
           />
@@ -101,9 +128,10 @@ const SignUpForm = () => {
 
         <button
           type="submit"
-          className="w-full rounded-lg bg-green-700 py-3 font-medium text-white hover:bg-green-800 cursor-pointer"
+          disabled={isLoading}
+          className="w-full rounded-lg bg-green-700 py-3 font-medium text-white hover:bg-green-800 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
         >
-          অ্যাকাউন্ট তৈরি করুন
+          {isLoading ? "অ্যাকাউন্ট তৈরি হচ্ছে..." : "অ্যাকাউন্ট তৈরি করুন"}
         </button>
 
         <div className="flex items-center gap-3">
@@ -112,15 +140,19 @@ const SignUpForm = () => {
           <div className="h-px flex-1 bg-gray-200" />
         </div>
 
-        <SocialLogin/>
+        <SocialLogin />
 
         <p className="text-center text-sm text-gray-500">
           অ্যাকাউন্ট আছে?{" "}
-          <Link href="/signin" className="font-medium text-green-700 cursor-pointer">
+          <Link
+            href="/signin"
+            className="font-medium text-green-700 hover:text-green-800"
+          >
             সাইন ইন করুন
           </Link>
         </p>
       </form>
+
       <div className="mt-6 text-center">
         <Link
           href="/"

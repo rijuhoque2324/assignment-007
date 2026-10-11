@@ -1,34 +1,48 @@
-
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { toast } from "react-toastify";
 import SocialLogin from "@/components/auth/SocialLogin";
 
 export default function SignInForm() {
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLElement>) => {
     e.preventDefault();
 
+    if (isLoading) return;
 
-    const formData = new FormData(e.target)
-    const user = Object.fromEntries(formData.entries()) as {email:string, password:string}
+    const formData = new FormData(e.target);
 
-    const {data, error} = await authClient.signIn.email({
-      ...user,
-      callbackURL: "/"
-    })
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
 
-    if(data){
-      toast.success("সফলভাবে সাইন ইন হয়েছে")
-    }
-    if(error){
-      toast.error(error.message || "সাইন ইন ব্যর্থ হয়েছে")
+    setIsLoading(true);
+
+    try {
+      const { data, error } = await authClient.signIn.email({
+        email,
+        password,
+        callbackURL: "/",
+      });
+
+      if (error) {
+        toast.error(error.message || "সাইন ইন ব্যর্থ হয়েছে!");
+        return;
+      }
+
+      if (data) {
+        toast.success("সফলভাবে সাইন ইন হয়েছে!");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("সমস্যা হয়েছে। আবার চেষ্টা করুন!");
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  
 
   return (
     <div className="w-full max-w-md">
@@ -36,6 +50,7 @@ export default function SignInForm() {
         <h1 className="text-3xl font-bold">
           স্বাগতম ফিরে আসায়
         </h1>
+
         <p className="mt-2 text-sm text-gray-500">
           আপনার অ্যাকাউন্টে সাইন ইন করুন।
         </p>
@@ -46,9 +61,13 @@ export default function SignInForm() {
         className="space-y-4 rounded-xl border border-gray-200 bg-white p-6"
       >
         <div>
-          <label htmlFor="login-email" className="mb-1 block text-sm">
+          <label
+            htmlFor="login-email"
+            className="mb-1 block text-sm"
+          >
             ইমেইল
           </label>
+
           <input
             id="login-email"
             type="email"
@@ -60,9 +79,13 @@ export default function SignInForm() {
         </div>
 
         <div>
-          <label htmlFor="login-password" className="mb-1 block text-sm">
+          <label
+            htmlFor="login-password"
+            className="mb-1 block text-sm"
+          >
             পাসওয়ার্ড
           </label>
+
           <input
             id="login-password"
             type="password"
@@ -71,13 +94,14 @@ export default function SignInForm() {
             placeholder="আপনার পাসওয়ার্ড"
             className="w-full rounded-lg border border-gray-200 p-3 outline-green-600"
           />
-        </div>        
+        </div>
 
         <button
           type="submit"
-          className="w-full rounded-lg bg-green-700 py-3 font-medium text-white hover:bg-green-800 cursor-pointer"
+          disabled={isLoading}
+          className="w-full rounded-lg bg-green-700 py-3 font-medium text-white hover:bg-green-800 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
         >
-          সাইন ইন করুন
+          {isLoading ? "সাইন ইন হচ্ছে..." : "সাইন ইন করুন"}
         </button>
 
         <div className="flex items-center gap-3">
@@ -86,15 +110,19 @@ export default function SignInForm() {
           <div className="h-px flex-1 bg-gray-200" />
         </div>
 
-        <SocialLogin/>
+        <SocialLogin />
 
         <p className="text-center text-sm text-gray-500">
           অ্যাকাউন্ট নেই?{" "}
-          <Link href="/signup" className="font-medium text-green-700">
+          <Link
+            href="/signup"
+            className="font-medium text-green-700 hover:text-green-800"
+          >
             অ্যাকাউন্ট তৈরি করুন
           </Link>
         </p>
       </form>
+
       <div className="mt-6 text-center">
         <Link
           href="/"

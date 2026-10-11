@@ -26,7 +26,7 @@ const PriceDecreased = async () => {
   .slice(0, 6);
 
   return (
-    <section className="container mx-auto py-6">
+    <section className="container mx-auto py-6 px-4">
       <h2 className="mb-4 text-xl font-bold">
         <span className="text-green-600">▼</span> আজ দাম কমেছে
       </h2>

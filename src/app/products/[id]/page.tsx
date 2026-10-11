@@ -11,7 +11,7 @@ const Page = async ({ params }: Props) => {
   const { id } = await params;
 
   const res = await fetch(
-    `https://api.abcz.workers.dev/api/bazardor/products/${id}`
+    `https://openapi.programming-hero.com/api/bazardor/products/${id}`
   );
 
   if (res.status === 404) {

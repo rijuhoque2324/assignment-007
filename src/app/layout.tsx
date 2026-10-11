@@ -5,6 +5,7 @@ import Headers from "@/components/Header";
 import NavLink from "@/components/NavLink";
 import Marquee from "@/components/homepage/Marquee";
 import Footer from "@/components/Footer";
+import ToastProvider from "@/components/ToastProvider";
 
 const notoSerifBengali = Noto_Serif_Bengali({
   subsets: ["latin", "bengali"],
@@ -19,9 +20,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${notoSerifBengali.className} h-full antialiased`}
+      className={`${notoSerifBengali.className} h-full antialiased`} suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <Headers/>
         <NavLink/>
         <Marquee/>
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <main className="flex-1 bg-[#f1f5f1]">
         
           {children}
+          <ToastProvider />
         </main>
         <Footer/>
       </body>

@@ -4,7 +4,7 @@ import ProductCard from "./ProductCard";
 
 const AllProducts = async () => {
   const res = await fetch(
-    "https://api.abcz.workers.dev/api/bazardor/products",
+    "https://openapi.programming-hero.com/api/bazardor/products",
     {
       next: { revalidate: 300 },
     }
@@ -21,7 +21,7 @@ const AllProducts = async () => {
     : data.data ?? [];
 
   return (
-    <div className="container mx-auto py-6">
+    <div className="container mx-auto py-6 px-4">
       <h2 className="text-xl font-bold">
         সব পণ্য
       </h2>

@@ -17,7 +17,7 @@ interface Headline {
 
 const MarqueeContent = async () => {
   const res = await fetch(
-    "https://api.abcz.workers.dev/api/bazardor/products"
+    "https://openapi.programming-hero.com/api/bazardor/products"
   );
 
   if (!res.ok) {

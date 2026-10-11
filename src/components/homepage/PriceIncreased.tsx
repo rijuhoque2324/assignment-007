@@ -26,9 +26,9 @@ const PriceIncreased = async () => {
   .slice(0, 6);
 
   return (
-    <section className="container mx-auto py-6">
+    <section className="container mx-auto py-6 px-4">
       <h2 className="mb-4 text-xl font-bold">
-        <span className="text-red-600">▲</span> আজ দাম বেড়েছে
+        <span className="text-red-600">▲</span> আজ দাম বেড়েছে
       </h2>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

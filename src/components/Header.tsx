@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import CurrentDate from "./CurrentDate";
+import UserInfor from "./auth/UserInfor";
 
 const Header = () => {
 
@@ -35,25 +36,7 @@ const Header = () => {
         </Link>
 
         {/* Auth Buttons */}
-        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <Link href="/signup">
-          <button
-            type="button"
-            className="rounded-lg px-2 py-2 font-semibold text-gray-800 transition hover:bg-gray-100 sm:px-4 sm:text-base"
-          >
-            সাইন ইন
-          </button>
-          </Link>
-
-        <Link href="/signin">
-          <button
-            type="button"
-            className="rounded-lg bg-[#07893e] px-3 py-2 font-semibold text-white shadow-md transition hover:bg-[#067a37] active:scale-95 sm:px-5 sm:py-2 sm:text-base"
-          >
-            সাইন আপ
-          </button>
-          </Link>
-        </div>
+        <UserInfor/>
 
       </div>
     </div>

@@ -1,22 +1,30 @@
 
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
+import { toast } from "react-toastify";
 
 export default function SignInForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLElement>) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      alert("ইমেইল এবং পাসওয়ার্ড দিন");
-      return;
-    }
 
-    alert("Login form ready! Authentication connect করতে হবে।");
+    const formData = new FormData(e.target)
+    const user = Object.fromEntries(formData.entries()) as {email:string, password:string}
+
+    const {data, error} = await authClient.signIn.email({
+      ...user,
+      callbackURL: "/"
+    })
+
+    if(data){
+      toast.success("সফলভাবে সাইন ইন হয়েছে")
+    }
+    if(error){
+      toast.error(error.message || "সাইন ইন ব্যর্থ হয়েছে")
+    }
   };
 
   return (
@@ -41,9 +49,8 @@ export default function SignInForm() {
           <input
             id="login-email"
             type="email"
+            name="email"
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
             className="w-full rounded-lg border border-gray-200 p-3 outline-green-600"
           />
@@ -56,9 +63,8 @@ export default function SignInForm() {
           <input
             id="login-password"
             type="password"
+            name="password"
             required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
             placeholder="আপনার পাসওয়ার্ড"
             className="w-full rounded-lg border border-gray-200 p-3 outline-green-600"
           />

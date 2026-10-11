@@ -1,25 +1,30 @@
-
-"use client";
-
-import { useState } from "react";
+"use client"
+import { authClient } from "@/lib/auth-client";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 
-export default function SignUpForm() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+const SignUpForm = () => {
+  const onSubmit = async (e: React.SubmitEvent<HTMLElement>) => {
+    e.preventDefault()
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+    const formData = new FormData(e.target)
+    const user = Object.fromEntries(formData.entries()) as {name:string, email: string, password:string
+    }
+    
+    const {data, error} = await authClient.signUp.email({
+      ...user,
+      callbackURL: "/"
+    })
 
-    if (password !== confirmPassword) {
-      alert("পাসওয়ার্ড মিলছে না!");
-      return;
+    if(data){
+      console.log(data);
+      redirect("/");
     }
 
-    alert("Form validated! এখন Authentication API connect করতে হবে।");
-  };
+    if(error){
+      console.log(error)
+    }
+  }
 
   return (
     <div className="w-full max-w-md mx-auto py-4">
@@ -32,8 +37,7 @@ export default function SignUpForm() {
         </p>
       </div>
 
-      <form
-        onSubmit={handleSubmit}
+      <form onSubmit={onSubmit}
         className="space-y-4 rounded-xl border border-gray-200 bg-white p-6"
       >
         <div>
@@ -42,10 +46,9 @@ export default function SignUpForm() {
           </label>
           <input
             id="name"
+            name="name"
             type="text"
             required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
             placeholder="যেমন: রহিম উদ্দিন"
             className="w-full rounded-lg border border-gray-200 p-3 outline-green-600"
           />
@@ -57,10 +60,9 @@ export default function SignUpForm() {
           </label>
           <input
             id="email"
+            name="email"
             type="email"
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             placeholder="you@example.com"
             className="w-full rounded-lg border border-gray-200 p-3 outline-green-600"
           />
@@ -72,11 +74,10 @@ export default function SignUpForm() {
           </label>
           <input
             id="password"
+            name="password"
             type="password"
             required
-            minLength={8}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            minLength={4}
             placeholder="কমপক্ষে ৮ অক্ষর"
             className="w-full rounded-lg border border-gray-200 p-3 outline-green-600"
           />
@@ -88,11 +89,10 @@ export default function SignUpForm() {
           </label>
           <input
             id="confirmPassword"
+            name="password"
             type="password"
             required
-            minLength={8}
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            minLength={4}
             placeholder="আবার লিখুন"
             className="w-full rounded-lg border border-gray-200 p-3 outline-green-600"
           />
@@ -124,4 +124,6 @@ export default function SignUpForm() {
       </form>
     </div>
   );
-}
+};
+
+export default SignUpForm;

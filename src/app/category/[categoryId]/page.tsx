@@ -19,8 +19,8 @@ const CategoryContent = async ({ params }: Props) => {
   const { categoryId } = await params;
 
   const [categoryRes, productRes] = await Promise.all([
-    fetch("https://api.abcz.workers.dev/api/bazardor/categories"),
-    fetch("https://api.abcz.workers.dev/api/bazardor/products"),
+    fetch("https://openapi.programming-hero.com/api/bazardor/categories"),
+    fetch("https://openapi.programming-hero.com/api/bazardor/products"),
   ]);
 
   if (!categoryRes.ok || !productRes.ok) {
